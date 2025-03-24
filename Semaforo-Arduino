@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-breadboard-half", "id": "bb1", "top": -310.2, "left": 50.8, "attrs": {} },
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": -37.8, "left": 76.2, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -224.4,
+      "left": 109.4,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -148.8,
+      "left": 95.45,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -224.4,
+      "left": 224.6,
+      "attrs": { "color": "yellow" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": -148.8,
+      "left": 210.65,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led3",
+      "top": -224.4,
+      "left": 330.2,
+      "attrs": { "color": "limegreen" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": -148.8,
+      "left": 316.25,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    [ "uno:GND.1", "bb1:bn.1", "black", [ "v-48", "h-106.9" ] ],
+    [ "led1:A", "bb1:7b.g", "", [ "$bb" ] ],
+    [ "led1:C", "bb1:6b.g", "", [ "$bb" ] ],
+    [ "bb1:7b.i", "uno:13", "green", [ "v67.2", "h66.8" ] ],
+    [ "r1:1", "bb1:6b.h", "", [ "$bb" ] ],
+    [ "r1:2", "bb1:bn.5", "", [ "$bb" ] ],
+    [ "bb1:19b.i", "uno:7", "gold", [ "v86.4", "h9.6" ] ],
+    [ "r2:1", "bb1:18b.h", "", [ "$bb" ] ],
+    [ "r2:2", "bb1:bn.15", "", [ "$bb" ] ],
+    [ "bb1:30b.i", "uno:2", "green", [ "v86.4", "h-48" ] ],
+    [ "led2:A", "bb1:19b.g", "", [ "$bb" ] ],
+    [ "led2:C", "bb1:18b.g", "", [ "$bb" ] ],
+    [ "led3:A", "bb1:30b.g", "", [ "$bb" ] ],
+    [ "led3:C", "bb1:29b.g", "", [ "$bb" ] ],
+    [ "r3:1", "bb1:29b.h", "", [ "$bb" ] ],
+    [ "r3:2", "bb1:bn.24", "", [ "$bb" ] ]
+  ],
+  "dependencies": {}
+}
