@@ -1,0 +1,45 @@
+#define trigger 7 
+#define echo 8
+
+int dist = 0;
+
+int ledR = 13;
+int ledY = 11; 
+int ledG = 12;
+
+void setup() {
+   pinMode(trigger, OUTPUT); 
+   pinMode(echo, INPUT); 
+   Serial.begin(9600);
+   
+   pinMode(ledR, OUTPUT); 
+   pinMode(ledY, OUTPUT); 
+   pinMode(ledG, OUTPUT);
+
+}
+
+void loop() { 
+
+digitalWrite(trigger, HIGH); 
+delayMicroseconds(10); 
+digitalWrite(trigger, LOW);
+
+dist = pulseIn(echo, HIGH); dist = dist/58;
+
+Serial.println(dist);
+
+if(dist <= 30){
+   digitalWrite(ledR, HIGH);
+    delay(2000); digitalWrite(ledR, LOW);
+
+  }else if(dist >30 && dist<=50){
+     digitalWrite(ledY, HIGH); 
+     delay(2000); 
+     digitalWrite(ledY, LOW); 
+     }else{ 
+      digitalWrite(ledG, HIGH); 
+      delay(2000); 
+      digitalWrite(ledG, LOW); 
+      }
+
+}
