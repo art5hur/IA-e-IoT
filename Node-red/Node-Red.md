@@ -42,11 +42,15 @@ O nome vêm dos atributos definidos no arduino:
 
 ![image](https://github.com/user-attachments/assets/a6e55d4f-ec80-4764-8559-9ffdfe01ea3d)
 
+# Adicionando o Ultrassônico:
+![image](https://github.com/user-attachments/assets/6d1719b8-aa61-4df8-ab13-2093fca42045)
+![image](https://github.com/user-attachments/assets/8c3916b6-1717-49fa-915d-1c060d228e79)
+![image](https://github.com/user-attachments/assets/4ca85c52-0cb2-4958-b2ce-8ec97eab721a)
+![image](https://github.com/user-attachments/assets/c29c0174-9819-490d-963c-6db1ecee077e)
+![image](https://github.com/user-attachments/assets/1282eb91-fee0-4afc-b770-447f8d9f1e78)
 
-
-
-
-
+# Exportar no Node-red:
+![image](https://github.com/user-attachments/assets/dae33ec5-dbab-4a11-b50a-5cd9ee2dddc2)
 
 
 
@@ -58,27 +62,41 @@ O nome vêm dos atributos definidos no arduino:
 #define dhtpin 2
 #define dhttype DHT11
 
-DHT dht (dhtpin, dhttype);
+#define trigger 4 
+#define echo 5  
 
+DHT dht (dhtpin, dhttype);
 
 void setup() {
   Serial.begin(9600);
   dht.begin();
+  pinMode(trigger, OUTPUT); 
+  pinMode(echo, INPUT); 
 }
 
 void loop() {
   int temp = dht.readTemperature();
   int umi = dht.readHumidity();
   
+
+  digitalWrite(trigger, HIGH); 
+  delayMicroseconds(10); 
+  digitalWrite(trigger, LOW);
+
+  int dist = pulseIn(echo, HIGH); 
+  dist = dist/58;
+
   //Criando o doc json
   StaticJsonDocument<100>json;
   
   //Criando o Atributo = Valor
   json["Temperatura"] = temp;
   json["Umidade"] = umi;
+  json["Distancia"] = dist;
 
   serializeJson(json, Serial);
   Serial.println();
-  delay(2000);
+  //delay(2000);
 
 }
+
