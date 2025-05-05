@@ -1,0 +1,45 @@
+#include <ArduinoJson.h>
+
+#define ledR 4
+#define ledG 3
+#define trigger 7
+#define echo 8
+
+int dist = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledR, OUTPUT);
+  pinMode(ledG, OUTPUT);
+  pinMode(trigger, OUTPUT);
+  pinMode(echo, INPUT);
+}
+
+void loop() {
+  digitalWrite(trigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigger, LOW);
+
+  dist = pulseIn(echo, HIGH);
+  dist = dist/58;
+
+  StaticJsonDocument<100>json;
+  json["Distancia"] = dist;
+
+  serializeJson(json, Serial);
+  Serial.println();
+  delay(2000);
+
+  if(Serial.available() > 0){
+    char comando = Serial.read();
+    if(comando == '1'){
+      digitalWrite(ledG, HIGH);
+      digitalWrite(ledR, HIGH);
+    }else if(comando == '0'){
+      digitalWrite(ledG, LOW);
+      digitalWrite(ledR, LOW);
+    } 
+
+  }
+
+}
