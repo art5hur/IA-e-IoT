@@ -1,0 +1,78 @@
+#include<ArduinoJson.h>
+#include<Servo.h>
+#include<DHT.h>
+
+#define ledR 4
+#define ledG 3
+
+#define dhtpin 12
+#define dhttype DHT11
+
+#define servoPin 10
+
+DHT dht (dhtpin, dhttype);
+Servo myservo;
+bool mode = true;
+
+void setup() {
+  myservo.attach(servoPin);
+  Serial.begin(9600);
+  digitalWrite(ledR, OUTPUT);
+  digitalWrite(ledG, OUTPUT);
+  dht.begin();
+  Serial.println("Escolha o modo M ou A");
+}
+
+void loop() {
+  int temp = dht.readTemperature();
+  int umi = dht.readHumidity();
+
+  StaticJsonDocument<100>json;
+  json["Temperatura"] = temp;
+  json["Umidade"] = umi;
+
+  serializeJson(json, Serial);
+  Serial.println();
+  delay(2000);
+
+  if(Serial.available()>0) {
+    char comando = Serial.read();
+
+    if(comando == 'M') {
+      Serial.println("MANUAL");
+      mode = false;
+  } else if (comando == 'A') {
+      Serial.println("AUTOMATICO");
+      mode = true;
+  }
+  }
+
+
+  if(!mode) {
+    char comando = Serial.read();
+    if(comando == '1') {
+      myservo.write(180);
+    } else if(comando == '0') {
+      myservo.write(90);
+    }
+  }
+
+  if(mode) {
+    if(temp >= 40) {
+    myservo.write(270);
+    digitalWrite(ledR, HIGH);
+    digitalWrite(ledG, LOW);
+  } else if(temp >= 30) {
+    myservo.write(180);
+    digitalWrite(ledR, LOW);
+    digitalWrite(ledG, HIGH);
+  } else if(temp < 30) {
+    myservo.write(90);
+    digitalWrite(ledR, HIGH);
+    digitalWrite(ledG, LOW);
+  }
+  }
+}
+
+
+

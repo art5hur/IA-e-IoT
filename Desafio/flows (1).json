@@ -1,0 +1,157 @@
+[
+    {
+        "id": "10d6408632f38b57",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9e484355a24d5138",
+        "type": "serial-port",
+        "name": "",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "9ffa785913afee60",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "a04063af0148c189",
+        "type": "serial in",
+        "z": "10d6408632f38b57",
+        "name": "",
+        "serial": "9e484355a24d5138",
+        "x": 210,
+        "y": 160,
+        "wires": [
+            [
+                "e1c9b85ea1dda990"
+            ]
+        ]
+    },
+    {
+        "id": "f6f9981dea5f740b",
+        "type": "debug",
+        "z": "10d6408632f38b57",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "e1c9b85ea1dda990",
+        "type": "json",
+        "z": "10d6408632f38b57",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 350,
+        "y": 140,
+        "wires": [
+            [
+                "f6f9981dea5f740b",
+                "d38f2046a632815a"
+            ]
+        ]
+    },
+    {
+        "id": "d38f2046a632815a",
+        "type": "mqtt out",
+        "z": "10d6408632f38b57",
+        "name": "",
+        "topic": "4sit/arthursantos",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9ffa785913afee60",
+        "x": 610,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "8fc3d2013c77d388",
+        "type": "mqtt in",
+        "z": "10d6408632f38b57",
+        "name": "",
+        "topic": "4sit/led/arthursantos",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9ffa785913afee60",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 270,
+        "y": 360,
+        "wires": [
+            [
+                "914504c50103246b"
+            ]
+        ]
+    },
+    {
+        "id": "914504c50103246b",
+        "type": "serial out",
+        "z": "10d6408632f38b57",
+        "name": "",
+        "serial": "9e484355a24d5138",
+        "x": 550,
+        "y": 340,
+        "wires": []
+    }
+]
