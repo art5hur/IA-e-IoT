@@ -6,19 +6,25 @@
 #define ledG 3
 
 #define dhtpin 12
-#define dhttype DHT11
+#define dhttype DHT22
 
-#define servoPin 10
+#define servo1Pin 10
+#define servo2Pin 5
+
 
 DHT dht (dhtpin, dhttype);
-Servo myservo;
+Servo servo1;
+Servo servo2;
 bool mode = true;
 
 void setup() {
-  myservo.attach(servoPin);
+  servo1.attach(servo1Pin);
+  servo2.attach(servo2Pin);
   Serial.begin(9600);
-  digitalWrite(ledR, OUTPUT);
-  digitalWrite(ledG, OUTPUT);
+
+  pinMode(ledR, OUTPUT);
+  pinMode(ledG, OUTPUT);
+  
   dht.begin();
   Serial.println("Escolha o modo M ou A");
 }
@@ -44,35 +50,36 @@ void loop() {
   } else if (comando == 'A') {
       Serial.println("AUTOMATICO");
       mode = true;
-  }
-  }
-
-
-  if(!mode) {
-    char comando = Serial.read();
+  }else if(!mode) {
     if(comando == '1') {
-      myservo.write(180);
-    } else if(comando == '0') {
-      myservo.write(90);
+      servo1.write(180);
+      servo2.write(90);
+    } else if(comando == '2') {
+      servo1.write(180);
+      servo2.write(180);
+    } else if(comando == '0'){
+      servo1.write(90);
+      servo2.write(90);
     }
-  }
-
-  if(mode) {
-    if(temp >= 40) {
-    myservo.write(270);
-    digitalWrite(ledR, HIGH);
-    digitalWrite(ledG, LOW);
-  } else if(temp >= 30) {
-    myservo.write(180);
-    digitalWrite(ledR, LOW);
-    digitalWrite(ledG, HIGH);
-  } else if(temp < 30) {
-    myservo.write(90);
-    digitalWrite(ledR, HIGH);
-    digitalWrite(ledG, LOW);
-  }
   }
 }
 
-
-
+  if(mode) {
+    if(temp >= 40) {
+    servo1.write(180);
+    servo2.write(-180);
+    digitalWrite(ledR, HIGH);
+    digitalWrite(ledG, LOW);
+  } else if(temp >= 30) {
+    servo1.write(180);
+    servo2.write(90);
+    digitalWrite(ledR, LOW);
+    digitalWrite(ledG, HIGH);
+  } else {
+    servo1.write(90);
+    servo2.write(90);
+    digitalWrite(ledR, HIGH);
+    digitalWrite(ledG, LOW);  
+  }
+  }
+}
