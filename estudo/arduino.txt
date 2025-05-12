@@ -1,0 +1,257 @@
+#include <Servo.h>
+
+#define TRIG_PIN 9
+#define ECHO_PIN 8
+#define SERVO_PIN 6
+
+Servo servoMotor;
+long duration;
+float distance;
+bool caixaCheia = false;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  servoMotor.attach(SERVO_PIN);
+  fecharValvula();
+}
+
+void loop() {
+  // Leitura do sensor a cada 2 segundos
+  medirDistancia();
+  Serial.print("{\"value\": ");
+  Serial.print(distance);
+  Serial.println("}");
+
+  // Controle automático com base na distância
+  if (distance < 10.0) {
+    abrirValvula();
+  } else {
+    fecharValvula();
+  }
+
+  // Controle manual via serial
+  if (Serial.available() > 0) {
+    char comando = Serial.read();
+    if (comando == '1') {
+      abrirValvula();
+    } else if (comando == '0') {
+      fecharValvula();
+    }
+  }
+
+  delay(2000);
+}
+
+void medirDistancia() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  duration = pulseIn(ECHO_PIN, HIGH);
+  distance = duration * 0.034 / 2;
+}
+
+void abrirValvula() {
+  servoMotor.write(90);
+}
+
+void fecharValvula() {
+  servoMotor.write(0);
+}
+
+
+
+
+
+
+
+JSON Node-Red:
+[
+  {
+    "id": "a1_serial_in",
+    "type": "serial in",
+    "z": "main",
+    "name": "Leitura Arduino",
+    "serial": "serial_port",
+    "x": 120,
+    "y": 100,
+    "wires": [["a2_json_parse"]]
+  },
+  {
+    "id": "a2_json_parse",
+    "type": "json",
+    "z": "main",
+    "name": "JSON Parse",
+    "property": "payload",
+    "action": "",
+    "pretty": false,
+    "x": 300,
+    "y": 100,
+    "wires": [["a3_debug", "a4_mqtt_pub", "a5_gauge", "a6_chart"]]
+  },
+  {
+    "id": "a3_debug",
+    "type": "debug",
+    "z": "main",
+    "name": "Debug Sensor",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 500,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "a4_mqtt_pub",
+    "type": "mqtt out",
+    "z": "main",
+    "name": "MQTT PUB Sensor",
+    "topic": "fiap/iot/S4IT/Grupo1/Sensor1",
+    "qos": "",
+    "retain": "",
+    "broker": "mqtt_broker",
+    "x": 520,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "a5_gauge",
+    "type": "ui_gauge",
+    "z": "main",
+    "name": "Nível da Caixa",
+    "group": "ui_group",
+    "order": 0,
+    "width": 6,
+    "height": 4,
+    "gtype": "gage",
+    "title": "Nível da Caixa (cm)",
+    "label": "cm",
+    "format": "{{value.value}}",
+    "min": 0,
+    "max": 30,
+    "colors": ["#00b500", "#e6e600", "#ca3838"],
+    "x": 540,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "a6_chart",
+    "type": "ui_chart",
+    "z": "main",
+    "name": "Histórico Nível",
+    "group": "ui_group",
+    "order": 1,
+    "width": 6,
+    "height": 4,
+    "label": "Histórico",
+    "chartType": "line",
+    "legend": "false",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "Sem dados",
+    "dot": false,
+    "ymin": "0",
+    "ymax": "30",
+    "removeOlder": "1",
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": 0,
+    "useOneColor": false,
+    "colors": ["#1f77b4"],
+    "x": 550,
+    "y": 180,
+    "wires": [[]]
+  },
+  {
+    "id": "a7_mqtt_sub",
+    "type": "mqtt in",
+    "z": "main",
+    "name": "MQTT SUB Servo",
+    "topic": "fiap/iot/S4IT/Grupo1/Servo1",
+    "qos": "2",
+    "datatype": "auto",
+    "broker": "mqtt_broker",
+    "x": 120,
+    "y": 260,
+    "wires": [["a8_func_serial"]]
+  },
+  {
+    "id": "a8_func_serial",
+    "type": "function",
+    "z": "main",
+    "name": "Comando para Arduino",
+    "func": "if (msg.payload == '1') {\n    msg.payload = '1';\n} else {\n    msg.payload = '0';\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 330,
+    "y": 260,
+    "wires": [["a9_serial_out"]]
+  },
+  {
+    "id": "a9_serial_out",
+    "type": "serial out",
+    "z": "main",
+    "name": "Enviar para Arduino",
+    "serial": "serial_port",
+    "x": 540,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "serial_port",
+    "type": "serial-port",
+    "z": "",
+    "serialport": "/dev/ttyUSB0",
+    "serialbaud": "9600",
+    "databits": "8",
+    "parity": "none",
+    "stopbits": "1",
+    "newline": "\\n",
+    "bin": "false",
+    "out": "char",
+    "addchar": false
+  },
+  {
+    "id": "mqtt_broker",
+    "type": "mqtt-broker",
+    "name": "Mosquitto Broker",
+    "broker": "test.mosquitto.org",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  },
+  {
+    "id": "ui_group",
+    "type": "ui_group",
+    "name": "Caixa d'Água",
+    "tab": "ui_tab",
+    "order": 1,
+    "disp": true,
+    "width": "6",
+    "collapse": false
+  },
+  {
+    "id": "ui_tab",
+    "type": "ui_tab",
+    "name": "Dashboard",
+    "icon": "dashboard",
+    "order": 1
+  }
+]
