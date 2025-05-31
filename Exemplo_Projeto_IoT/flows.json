@@ -1,0 +1,149 @@
+[
+    {
+        "id": "f76b3db6fb05195e",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0172e6127e1fa943",
+        "type": "serial in",
+        "z": "f76b3db6fb05195e",
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "69e5b31ddb93e7ff"
+            ]
+        ]
+    },
+    {
+        "id": "69e5b31ddb93e7ff",
+        "type": "json",
+        "z": "f76b3db6fb05195e",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 350,
+        "y": 200,
+        "wires": [
+            [
+                "1a5126a748694b6b"
+            ]
+        ]
+    },
+    {
+        "id": "1a5126a748694b6b",
+        "type": "change",
+        "z": "f76b3db6fb05195e",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "db632fb3d1f5a459"
+            ]
+        ]
+    },
+    {
+        "id": "db632fb3d1f5a459",
+        "type": "ui_gauge",
+        "z": "f76b3db6fb05195e",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "gauge",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00B500",
+            "#E6E600",
+            "#CA3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 790,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "a695dc034987a8d1",
+        "type": "serial in",
+        "z": "f76b3db6fb05195e",
+        "x": 270,
+        "y": 420,
+        "wires": [
+            [
+                "479aa7a3e341ae45"
+            ]
+        ]
+    },
+    {
+        "id": "479aa7a3e341ae45",
+        "type": "mqtt out",
+        "z": "f76b3db6fb05195e",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "x": 510,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "a8ceeedb2759c28a",
+        "type": "mqtt in",
+        "z": "f76b3db6fb05195e",
+        "name": "",
+        "topic": "",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 540,
+        "wires": [
+            [
+                "9bac329b93407b4f"
+            ]
+        ]
+    },
+    {
+        "id": "9bac329b93407b4f",
+        "type": "serial out",
+        "z": "f76b3db6fb05195e",
+        "x": 470,
+        "y": 500,
+        "wires": []
+    }
+]
