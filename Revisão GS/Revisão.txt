@@ -1,0 +1,103 @@
+https://wokwi.com/projects/433053579834940417
+
+
+#include <ArduinoJson.h>
+#include <DHT.h>
+#include <Servo.h>
+
+#define ledG 3
+#define ledY 2
+#define ledR 5
+#define dhtpin 10
+#define servopin1 6
+
+
+DHT dht(dhtpin, DHT22);
+
+Servo myServo1;
+
+bool mode = true; 
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  myServo1.attach(servopin1);
+  pinMode(ledG, OUTPUT);
+  pinMode(ledY, OUTPUT);
+  pinMode(ledR, OUTPUT);
+  Serial.println("Digite 1 ou 0 para escolher o modo");
+}
+
+void loop() {
+
+    int temp = dht.readTemperature();
+    int umid = dht.readHumidity();
+
+    StaticJsonDocument<100>json;
+    json["Temperatura"] = temp;
+    json["Umidade"] = umid;
+
+    serializeJson(json, Serial);
+    Serial.println();
+    delay(2000);
+
+
+  if(Serial.available() > 0){
+    char comando = Serial.read();
+    if(comando == '1'){
+      mode = false;
+      Serial.println("Modo Manual ativado");
+    }else if(comando == '0'){
+      mode = true;
+      Serial.println("Modo Automatico ativado");
+    }
+  }
+
+    while(!mode){
+      digitalWrite(ledG, HIGH);
+      digitalWrite(ledR, HIGH);
+      digitalWrite(ledY, HIGH);
+      delay(500);
+
+      digitalWrite(ledG, LOW);
+      digitalWrite(ledR, LOW);
+      digitalWrite(ledY, LOW);
+      delay(500);
+
+      myServo1.write(0);
+      delay(1000);
+      myServo1.write(180);
+      delay(1000);
+
+      if(Serial.available() > 0){
+        char comando = Serial.read();
+        if (comando == '0'){
+          mode = true;
+          Serial.println("Retornando ao modo Automático!");
+          break;
+        }
+      }
+    }
+    
+  if(mode){
+    if(temp < 30 || umid < 30){
+      digitalWrite(ledG, LOW);
+      digitalWrite(ledR, LOW);
+      digitalWrite(ledY, HIGH);
+      myServo1.write(0);
+      
+    }else if(temp < 40 && umid < 40){
+      digitalWrite(ledY, LOW);
+      digitalWrite(ledR, LOW);
+      digitalWrite(ledG, HIGH);
+      myServo1.write(0);
+      
+    }else{
+      digitalWrite(ledG, LOW);
+      digitalWrite(ledY, LOW);
+      digitalWrite(ledR, HIGH);
+      myServo1.write(180);
+    }
+    }
+  }
+
