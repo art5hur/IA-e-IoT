@@ -1,0 +1,315 @@
+[
+    {
+        "id": "05d7416d20815b18",
+        "type": "tab",
+        "label": "Revisão GS",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f9d0df7d80b6f374",
+        "type": "serial in",
+        "z": "05d7416d20815b18",
+        "name": "COM5",
+        "serial": "9e484355a24d5138",
+        "x": 230,
+        "y": 120,
+        "wires": [
+            [
+                "37b104918effc2f4"
+            ]
+        ]
+    },
+    {
+        "id": "37b104918effc2f4",
+        "type": "json",
+        "z": "05d7416d20815b18",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 430,
+        "y": 120,
+        "wires": [
+            [
+                "cbe14b41b83aa966",
+                "340925ec9c9ba744"
+            ]
+        ]
+    },
+    {
+        "id": "cbe14b41b83aa966",
+        "type": "change",
+        "z": "05d7416d20815b18",
+        "name": "Temperatura",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.Temperatura",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 100,
+        "wires": [
+            [
+                "13d6045bc71ecae0",
+                "1b4833c1b7c3dc06"
+            ]
+        ]
+    },
+    {
+        "id": "340925ec9c9ba744",
+        "type": "change",
+        "z": "05d7416d20815b18",
+        "name": "Umidade",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.Umidade",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 640,
+        "y": 200,
+        "wires": [
+            [
+                "13d6045bc71ecae0",
+                "c62305255f2b016d"
+            ]
+        ]
+    },
+    {
+        "id": "13d6045bc71ecae0",
+        "type": "mqtt out",
+        "z": "05d7416d20815b18",
+        "name": "MQTT PUB",
+        "topic": "fiap/iot/4sit/ArthurMirandaRenan/sensor1",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9ffa785913afee60",
+        "x": 930,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "1b4833c1b7c3dc06",
+        "type": "ui_chart",
+        "z": "05d7416d20815b18",
+        "name": "",
+        "group": "33f2e53a333e5e0b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Nível de Temperatura",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 960,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9a33db285f9ae10f",
+        "type": "mqtt in",
+        "z": "05d7416d20815b18",
+        "name": "MQTT SUB",
+        "topic": "fiap/iot/4sit/ArthurMirandaRenan/reparo",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9ffa785913afee60",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 270,
+        "y": 340,
+        "wires": [
+            [
+                "837aa75967ba6614"
+            ]
+        ]
+    },
+    {
+        "id": "837aa75967ba6614",
+        "type": "serial out",
+        "z": "05d7416d20815b18",
+        "name": "COM5",
+        "serial": "9e484355a24d5138",
+        "x": 490,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "c62305255f2b016d",
+        "type": "ui_chart",
+        "z": "05d7416d20815b18",
+        "name": "",
+        "group": "a27fde123ba460b1",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Nível da Umidade",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 950,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9e484355a24d5138",
+        "type": "serial-port",
+        "name": "",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "9ffa785913afee60",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "33f2e53a333e5e0b",
+        "type": "ui_group",
+        "name": "Medição da Temperatura",
+        "tab": "b4609123447f9c07",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a27fde123ba460b1",
+        "type": "ui_group",
+        "name": "Medição da Umidade",
+        "tab": "b4609123447f9c07",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b4609123447f9c07",
+        "type": "ui_tab",
+        "name": "Estufa",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
